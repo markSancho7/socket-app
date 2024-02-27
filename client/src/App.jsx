@@ -1,17 +1,24 @@
 import { GlobalStyles } from './styles/GlobalStyles';
 import { socket } from './sockets/socket';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Counter from './components/Counter';
 const App = () => {
-	console.log(socket);
+	const [counter, setCounter] = useState(0);
+	// console.log(socket);
 	useEffect(() => {
-		socket.on('response', data => {
-			console.log(data);
+		socket.on('response', counter => {
+			setCounter(counter);
 		});
-	});
+	}, []);
+	useEffect(() => {
+		socket.emit('message', counter);
+	}, [counter]);
 	return (
 		<>
 			<GlobalStyles />
-			<h1>REACT OK</h1>
+			<p>numero de usuario: {socket.id}</p>
+
+			<Counter counter={counter} setCounter={setCounter}></Counter>
 			<form onSubmit={event => handleSubmit(event, socket)}>
 				<input type='text' name='name' />
 				<button>Send</button>
