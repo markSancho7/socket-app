@@ -8,8 +8,8 @@ const Chat = () => {
 	const [allUsers, setAllUsers] = useState([]);
 	const [allMessages, setAllMessages] = useState([]);
 	useEffect(() => {
-		socket.on('responseUsers', user => {
-			setAllUsers([...allUsers, user]);
+		socket.on('responseUsers', allUsersConected => {
+			setAllUsers(allUsersConected);
 		});
 	});
 	useEffect(() => {
@@ -17,14 +17,14 @@ const Chat = () => {
 			setAllMessages([...allMessages, message]);
 		});
 	});
-
+	console.log(allUsers);
 	return (
 		<>
 			<StyledChat>
 				<div>
 					<h1>Usuarios conectados</h1>
 					{allUsers.map(user => (
-						<p key={user}>{user}</p>
+						<p key={user.id}>{user.username}</p>
 					))}
 				</div>
 				<div>
@@ -41,9 +41,9 @@ const Chat = () => {
 				<div>
 					<h1>CHAT</h1>
 					{allMessages.map(message => (
-						<div key={message.message.id}>
-							<p>{message.message.user}</p>
-							<p>{message.message.info}</p>
+						<div key={message.id}>
+							<p>{message.username}</p>
+							<p>{message.info}</p>
 						</div>
 					))}
 				</div>
@@ -57,11 +57,8 @@ const handleSubmit = event => {
 	const message = event.target.message.value;
 	console.log(message);
 	socket.emit('message', {
-		message: {
-			id: v4(),
-			user: socket.id,
-			info: message
-		}
+		id: v4(),
+		info: message
 	});
 	// setAllMessages([
 	// 	...allMessages,

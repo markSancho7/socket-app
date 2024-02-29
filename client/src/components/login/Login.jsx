@@ -3,14 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 	const navigate = useNavigate();
-	// messages
-	// const [allMessages, setAllMessages] = useState([]);
-
-	// useEffect(() => {
-	// 	socket.on('responseForm', message => {
-	// 		setAllMessages([...allMessages, message]);
-	// 	});
-	// }, [allMessages]);
 
 	return (
 		<>
@@ -24,15 +16,8 @@ const Login = () => {
 };
 const handleSubmit = (event, socket, navigate) => {
 	event.preventDefault();
-	const name = event.target.name.value;
-	socket.emit('users', name);
+	const username = event.target.name.value;
+	socket.emit('login', username);
 	navigate('/chat');
 };
 export default Login;
-
-// {
-// 		state: {
-// 			id: socket.id,
-// 			user: name
-// 		}
-// 	}

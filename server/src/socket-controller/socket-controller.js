@@ -1,3 +1,4 @@
+const allUsers = [];
 const establishSocketConnection = (socket, io) => {
   console.log("Cliente conectado");
 
@@ -10,13 +11,15 @@ const establishSocketConnection = (socket, io) => {
   // form
   socket.on("message", (data) => {
     console.log(data);
-    io.emit("responseMessages", data);
+    io.emit("responseMessages", { ...data, username: socket.username });
   });
   // users
-  socket.on("users", (data) => {
-    console.log(data);
-    io.emit("responseUsers", data);
+  socket.on("login", (username) => {
+    socket.username = username;
+    allUsers.push({ id: socket.id, username });
+    io.emit("responseUsers", allUsers);
   });
+  io.emit("responseUsers", allUsers);
 };
 
 module.exports = establishSocketConnection;
